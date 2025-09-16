@@ -172,6 +172,18 @@ button:hover:not(:disabled){
   border-radius: 10px;
 }
 
+/* Toolbar gestor de productos */
+.toolbar{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.toolbar .muted{
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
 .products-container{
   margin-top: 10px;
   overflow-x: auto;
@@ -245,7 +257,44 @@ button:hover:not(:disabled){
   color: var(--accent);
 }
 
-/* PDF styles (simplificados en blanco) */
+/* ===== Modal ===== */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.55);
+  z-index: 50;
+}
+.modal[hidden]{ display: none; }
+
+.modal-dialog{
+  width: min(560px, 92vw);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+}
+.modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.icon-btn{
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.modal-body{ padding-top: 6px; }
+.modal-footer{
+  display:flex; gap:10px; justify-content:flex-end;
+  border-top: 1px solid var(--border);
+  padding-top: 10px; margin-top: 10px;
+}
+.danger{ background: var(--danger); color: #fff; }
+.error{ color: #ff8a8a; font-size: 12px; margin: 4px 0 0; }
+
+/* ===== PDF ===== */
 #pdf-template{
   font-family: 'Montserrat', Arial, sans-serif;
   color: #000;
@@ -309,4 +358,49 @@ button:hover:not(:disabled){
   margin-top: 10px;
   font-size: 11px;
   text-align: center;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 900px){
+  .app-container{ grid-template-columns: 1fr; }
+  .sidebar{ position: sticky; top: 0; z-index: 10; border-right: none; border-bottom: 1px solid var(--border); }
+  .main-content{ padding: 16px; }
+
+  .input-group{ grid-template-columns: 1fr; }
+
+  /* tabla → tarjetas */
+  .products-list-table thead{ display: none; }
+  .products-list-table,
+  .products-list-table tbody,
+  .products-list-table tr,
+  .products-list-table td{
+    display: block; width: 100%;
+  }
+  .products-list-table tr{
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    background: #0f1320;
+  }
+  .products-list-table td{
+    border: none; border-bottom: 1px solid #1c2130;
+    display: grid; grid-template-columns: 120px 1fr; gap: 8px;
+    padding: 8px 6px;
+  }
+  .products-list-table td:last-child{
+    border-bottom: none;
+  }
+  .products-list-table td::before{
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .totals-wrapper{ position: sticky; bottom: 8px; }
+}
+
+/* Botón PDF ancho en mobile */
+@media (max-width: 520px){
+  #generate-pdf-btn{ width: 100%; }
 }

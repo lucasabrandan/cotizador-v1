@@ -6,12 +6,12 @@
   <title>Cotizador</title>
   <link rel="stylesheet" href="css/style.css"/>
 
-  <!-- Montserrat -->
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/>
 
-  <!-- Librerías para exportar a PDF (necesarias para tu código) -->
+  <!-- Librerías PDF -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
 </head>
@@ -21,113 +21,171 @@
       <h1 class="sidebar-title">// Barra lateral<br/>Cotizador</h1>
       <nav>
         <ul>
-          <li><a href="#" class="active">Dashboard</a></li>
-          <li><a href="#">Productos</a></li>
-          <li><a href="#">Cotizaciones</a></li>
+          <li><a href="#" class="active" data-view="view-quote">Cotización</a></li>
+          <li><a href="#" data-view="view-products">Productos</a></li>
+          <li><a href="#" data-view="view-history" style="opacity:.5;pointer-events:none;">Cotizaciones</a></li>
         </ul>
       </nav>
     </aside>
 
     <main class="main-content">
-      <div class="quote-form-container">
-        <h2>Nueva Cotización</h2>
+      <!-- ======== VISTA: COTIZACIÓN (visible al inicio) ======== -->
+      <section id="view-quote">
+        <div class="quote-form-container">
+          <h2>Nueva Cotización</h2>
 
-        <form id="quote-form">
-          <!-- Sección: Datos de la cotización -->
-          <div id="section-quote-info" class="form-section active" data-next-section="section-client-info">
-            <h3>Datos de la Cotización</h3>
-            <div class="input-group">
-              <label for="quote-number">N° de Presupuesto</label>
-              <input type="text" id="quote-number" name="quote-number" required />
-            </div>
-            <div class="input-group">
-              <label for="quote-date">Fecha</label>
-              <input type="date" id="quote-date" name="quote-date" required />
-            </div>
-          </div>
-
-          <!-- Sección: Datos del cliente -->
-          <div id="section-client-info" class="form-section disabled" data-next-section="section-products">
-            <h3>Datos del Cliente</h3>
-            <div class="input-group">
-              <label for="client-name">Nombre</label>
-              <input type="text" id="client-name" name="client-name" required />
-            </div>
-            <div class="input-group">
-              <label for="client-contact">Contacto</label>
-              <input type="text" id="client-contact" name="client-contact" required />
-            </div>
-            <div class="input-group">
-              <label for="client-address">Dirección</label>
-              <input type="text" id="client-address" name="client-address" required />
-            </div>
-            <div class="input-group">
-              <label for="client-location">Localidad</label>
-              <input type="text" id="client-location" name="client-location" required />
-            </div>
-          </div>
-
-          <!-- Sección: Productos -->
-          <div id="section-products" class="form-section disabled">
-            <h3>Agregar Productos</h3>
-
-            <div class="input-group search-container">
-              <input type="text" id="product-search" placeholder="Buscar productos por SKU o nombre…"/>
-              <ul id="suggestions-list" class="suggestions-list"></ul>
-            </div>
-
-            <div id="product-actions" style="margin-top: 10px;">
-              <button type="button" id="add-product-btn" disabled>Agregar</button>
-            </div>
-          </div>
-        </form>
-
-        <!-- Tabla de productos -->
-        <div class="products-container">
-          <table id="products-list-table" class="products-list-table">
-            <thead>
-              <tr>
-                <th>SKU</th>
-                <th>Nombre del Producto</th>
-                <th>Cantidad</th>
-                <th>P. Unidad</th>
-                <th>P. Total</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-
-          <!-- Totales -->
-          <div id="totals-wrapper" class="totals-wrapper">
-            <div id="totals-container" class="totals-container">
-              <div class="total-line">
-                <span>Subtotal:</span>
-                <span id="subtotal-value">$0,00</span>
+          <form id="quote-form">
+            <!-- Datos de la cotización -->
+            <div id="section-quote-info" class="form-section active" data-next-section="section-client-info">
+              <h3>Datos de la Cotización</h3>
+              <div class="input-group">
+                <label for="quote-number">N° de Presupuesto</label>
+                <input type="text" id="quote-number" name="quote-number" required />
               </div>
+              <div class="input-group">
+                <label for="quote-date">Fecha</label>
+                <input type="date" id="quote-date" name="quote-date" required />
+              </div>
+            </div>
 
-              <div class="total-line">
-                <label for="discount-input">Descuento:</label>
-                <div class="discount-inline">
-                  <input type="number" id="discount-input" min="0" max="100" value="0" /> <span class="percent-suffix">%</span>
+            <!-- Datos del cliente -->
+            <div id="section-client-info" class="form-section disabled" data-next-section="section-products">
+              <h3>Datos del Cliente</h3>
+              <div class="input-group">
+                <label for="client-name">Nombre</label>
+                <input type="text" id="client-name" name="client-name" required />
+              </div>
+              <div class="input-group">
+                <label for="client-contact">Contacto</label>
+                <input type="text" id="client-contact" name="client-contact" required />
+              </div>
+              <div class="input-group">
+                <label for="client-address">Dirección</label>
+                <input type="text" id="client-address" name="client-address" required />
+              </div>
+              <div class="input-group">
+                <label for="client-location">Localidad</label>
+                <input type="text" id="client-location" name="client-location" required />
+              </div>
+            </div>
+
+            <!-- Productos -->
+            <div id="section-products" class="form-section disabled">
+              <h3>Agregar Productos</h3>
+              <div class="input-group search-container">
+                <input type="text" id="product-search" placeholder="Buscar productos por SKU o nombre…"/>
+                <ul id="suggestions-list" class="suggestions-list"></ul>
+              </div>
+              <div id="product-actions" style="margin-top: 10px;">
+                <button type="button" id="add-product-btn" disabled>Agregar</button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Tabla de productos -->
+          <div class="products-container">
+            <table id="products-list-table" class="products-list-table">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Nombre del Producto</th>
+                  <th>Cantidad</th>
+                  <th>P. Unidad</th>
+                  <th>P. Total</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            <!-- Totales -->
+            <div id="totals-wrapper" class="totals-wrapper">
+              <div id="totals-container" class="totals-container">
+                <div class="total-line">
+                  <span>Subtotal:</span>
+                  <span id="subtotal-value">$0,00</span>
                 </div>
-                <span id="discount-value">0%</span>
-              </div>
 
-              <div class="final-total">
-                <span>TOTAL FINAL:</span>
-                <span id="final-total-value">$0,00</span>
+                <div class="total-line">
+                  <label for="discount-input">Descuento:</label>
+                  <div class="discount-inline">
+                    <input type="number" id="discount-input" min="0" max="100" value="0" /> <span class="percent-suffix">%</span>
+                  </div>
+                  <span id="discount-value">0%</span>
+                </div>
+
+                <div class="final-total">
+                  <span>TOTAL FINAL:</span>
+                  <span id="final-total-value">$0,00</span>
+                </div>
               </div>
             </div>
+          </div>
+
+          <button type="button" id="generate-pdf-btn" disabled>Generar PDF</button>
+        </div>
+      </section>
+
+      <!-- ======== VISTA: GESTOR DE PRODUCTOS (oculta al inicio) ======== -->
+      <section id="view-products" hidden>
+        <div class="quote-form-container">
+          <h2>Lista de Productos</h2>
+
+          <div class="toolbar">
+            <input type="text" id="pm-search" placeholder="Buscar por SKU o nombre…" />
+            <button id="pm-add-btn" type="button">Nuevo producto</button>
+            <button id="pm-reset-btn" type="button" class="muted">Restaurar lista por defecto</button>
+          </div>
+
+          <div class="products-container">
+            <table id="pm-table" class="products-list-table">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th style="width:160px;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody><!-- se llena por JS --></tbody>
+            </table>
           </div>
         </div>
-
-        <button type="button" id="generate-pdf-btn" disabled>Generar PDF</button>
-      </div>
+      </section>
     </main>
   </div>
 
-  <!-- PLANTILLA PDF (se oculta y se rasteriza con html2canvas) -->
+  <!-- ======== MODAL EDICIÓN / ALTA DE PRODUCTO ======== -->
+  <div id="pm-modal" class="modal" hidden>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="pm-modal-title">Editar producto</h3>
+        <button type="button" id="pm-modal-close" class="icon-btn" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label for="pm-sku">SKU</label>
+          <input type="text" id="pm-sku" />
+        </div>
+        <div class="input-group">
+          <label for="pm-name">Nombre</label>
+          <input type="text" id="pm-name" />
+        </div>
+        <div class="input-group">
+          <label for="pm-price">Precio (ARS)</label>
+          <input type="number" id="pm-price" min="0" step="1" />
+        </div>
+        <p id="pm-error" class="error" hidden></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="pm-save-btn">Guardar</button>
+        <button type="button" id="pm-delete-btn" class="danger" hidden>Eliminar</button>
+        <button type="button" id="pm-cancel-btn" class="muted">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANTILLA PDF (oculta y rasterizada con html2canvas) -->
   <div id="pdf-template" style="display:none;">
     <div class="pdf-container">
       <div class="pdf-header">
