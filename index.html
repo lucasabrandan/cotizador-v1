@@ -1,174 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cotizador</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cotizador</title>
+  <link rel="stylesheet" href="css/style.css"/>
+
+  <!-- Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Librerías para exportar a PDF (necesarias para tu código) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <h1 class="sidebar-title">// Barra lateral<br>Cotizador</h1>
-            <nav>
-                <ul>
-                    <li><a href="#" class="active">Dashboard</a></li>
-                    <li><a href="#">Productos</a></li>
-                    <li><a href="#">Cotizaciones</a></li>
-                </ul>
-            </nav>
-        </aside>
+  <div class="app-container">
+    <aside class="sidebar">
+      <h1 class="sidebar-title">// Barra lateral<br/>Cotizador</h1>
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Dashboard</a></li>
+          <li><a href="#">Productos</a></li>
+          <li><a href="#">Cotizaciones</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-        <main class="main-content">
-            <div class="quote-form-container">
-                <h2>Nueva Cotización</h2>
-                <form id="quote-form">
-                    <div id="section-quote-info" class="form-section active" data-next-section="section-client-info">
-                        <h3>Datos de la Cotización</h3>
-                        <div class="input-group">
-                            <label for="quote-number">N° de Presupuesto</label>
-                            <input type="text" id="quote-number" name="quote-number" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="quote-date">Fecha</label>
-                            <input type="date" id="quote-date" name="quote-date" required>
-                        </div>
-                    </div>
+    <main class="main-content">
+      <div class="quote-form-container">
+        <h2>Nueva Cotización</h2>
 
-                    <div id="section-client-info" class="form-section disabled" data-next-section="section-products">
-                        <h3>Datos del Cliente</h3>
-                        <div class="input-group">
-                            <label for="client-name">Nombre</label>
-                            <input type="text" id="client-name" name="client-name" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="client-contact">Contacto</label>
-                            <input type="text" id="client-contact" name="client-contact" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="client-address">Dirección</label>
-                            <input type="text" id="client-address" name="client-address" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="client-location">Localidad</label>
-                            <input type="text" id="client-location" name="client-location" required>
-                        </div>
-                    </div>
-
-                    <div id="section-products" class="form-section disabled">
-                        <h3>Agregar Productos</h3>
-                        <div class="input-group search-container">
-                            <input type="text" id="product-search" placeholder="Buscar productos...">
-                            <ul id="suggestions-list" class="suggestions-list"></ul>
-                        </div>
-                        <div id="product-actions" style="margin-top: 10px;">
-                            <button type="button" id="add-product-btn">Agregar</button>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="products-container">
-                    <table id="products-list-table" class="products-list-table">
-                        <thead>
-                            <tr>
-                                <th>SKU</th>
-                                <th>Nombre del Producto</th>
-                                <th>Cantidad</th>
-                                <th>P. Unidad</th>
-                                <th>P. Total</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            </tbody>
-                    </table>
-
-                    <div id="totals-wrapper" class="totals-wrapper">
-                        <div id="totals-container" class="totals-container">
-                            <div class="total-line">
-                                <span>Subtotal:</span>
-                                <span id="subtotal-value">$0.00</span>
-                            </div>
-                            <div class="total-line">
-                                <span>Descuento:</span>
-                                <span id="discount-value">0%</span>
-                            </div>
-                            <div class="final-total">
-                                <span>TOTAL FINAL:</span>
-                                <span id="final-total-value">$0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="button" id="generate-pdf-btn">Generar PDF</button>
-
+        <form id="quote-form">
+          <!-- Sección: Datos de la cotización -->
+          <div id="section-quote-info" class="form-section active" data-next-section="section-client-info">
+            <h3>Datos de la Cotización</h3>
+            <div class="input-group">
+              <label for="quote-number">N° de Presupuesto</label>
+              <input type="text" id="quote-number" name="quote-number" required />
             </div>
-        </main>
-    </div>
-
-    <div id="pdf-template">
-        <div class="pdf-container">
-            <div class="pdf-header">
-                <h1 class="pdf-title">PRESUPUESTO DE VENTA</h1>
+            <div class="input-group">
+              <label for="quote-date">Fecha</label>
+              <input type="date" id="quote-date" name="quote-date" required />
             </div>
-            <div class="pdf-body">
-                <div class="info-section-container">
-                    <div class="pdf-section client-info">
-                        <h4 class="pdf-section-title">Datos del Cliente</h4>
-                        <p>Nombre: <span id="pdf-client-name"></span></p>
-                        <p>Contacto: <span id="pdf-client-contact"></span></p>
-                        <p>Dirección: <span id="pdf-client-address"></span></p>
-                        <p>Localidad: <span id="pdf-client-location"></span></p>
-                    </div>
-                    <div class="pdf-section quote-info">
-                        <h4 class="pdf-section-title">Datos del Presupuesto</h4>
-                        <p>N° de Presupuesto: <span id="pdf-quote-number"></span></p>
-                        <p>Fecha: <span id="pdf-quote-date"></span></p>
-                    </div>
-                </div>
+          </div>
 
-                <div class="products-container-pdf">
-                    <table id="pdf-table" class="pdf-table">
-                        <thead>
-                            <tr>
-                                <th>SKU</th>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>P. Unitario</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+          <!-- Sección: Datos del cliente -->
+          <div id="section-client-info" class="form-section disabled" data-next-section="section-products">
+            <h3>Datos del Cliente</h3>
+            <div class="input-group">
+              <label for="client-name">Nombre</label>
+              <input type="text" id="client-name" name="client-name" required />
+            </div>
+            <div class="input-group">
+              <label for="client-contact">Contacto</label>
+              <input type="text" id="client-contact" name="client-contact" required />
+            </div>
+            <div class="input-group">
+              <label for="client-address">Dirección</label>
+              <input type="text" id="client-address" name="client-address" required />
+            </div>
+            <div class="input-group">
+              <label for="client-location">Localidad</label>
+              <input type="text" id="client-location" name="client-location" required />
+            </div>
+          </div>
 
-                <div class="totals-wrapper-pdf">
-                    <div class="totals-container-pdf">
-                        <div class="total-line-pdf">
-                            <span>Subtotal:</span>
-                            <span id="pdf-subtotal-value"></span>
-                        </div>
-                        <div class="total-line-pdf">
-                            <span>Descuento:</span>
-                            <span id="pdf-discount-value"></span>
-                        </div>
-                        <div class="final-total-pdf">
-                            <span>TOTAL FINAL:</span>
-                            <span id="pdf-final-total-value"></span>
-                        </div>
-                    </div>
+          <!-- Sección: Productos -->
+          <div id="section-products" class="form-section disabled">
+            <h3>Agregar Productos</h3>
+
+            <div class="input-group search-container">
+              <input type="text" id="product-search" placeholder="Buscar productos por SKU o nombre…"/>
+              <ul id="suggestions-list" class="suggestions-list"></ul>
+            </div>
+
+            <div id="product-actions" style="margin-top: 10px;">
+              <button type="button" id="add-product-btn" disabled>Agregar</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Tabla de productos -->
+        <div class="products-container">
+          <table id="products-list-table" class="products-list-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Nombre del Producto</th>
+                <th>Cantidad</th>
+                <th>P. Unidad</th>
+                <th>P. Total</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <!-- Totales -->
+          <div id="totals-wrapper" class="totals-wrapper">
+            <div id="totals-container" class="totals-container">
+              <div class="total-line">
+                <span>Subtotal:</span>
+                <span id="subtotal-value">$0,00</span>
+              </div>
+
+              <div class="total-line">
+                <label for="discount-input">Descuento:</label>
+                <div class="discount-inline">
+                  <input type="number" id="discount-input" min="0" max="100" value="0" /> <span class="percent-suffix">%</span>
                 </div>
+                <span id="discount-value">0%</span>
+              </div>
+
+              <div class="final-total">
+                <span>TOTAL FINAL:</span>
+                <span id="final-total-value">$0,00</span>
+              </div>
             </div>
-            <div class="pdf-footer">
-                <p>Este presupuesto posee una validez de hasta 1 semana a partir del día que fue emitido.</p>
-            </div>
+          </div>
         </div>
-    </div>
 
-    <script src="js/app.js"></script>
+        <button type="button" id="generate-pdf-btn" disabled>Generar PDF</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- PLANTILLA PDF (se oculta y se rasteriza con html2canvas) -->
+  <div id="pdf-template" style="display:none;">
+    <div class="pdf-container">
+      <div class="pdf-header">
+        <h1 class="pdf-title">PRESUPUESTO DE VENTA</h1>
+      </div>
+
+      <div class="pdf-body">
+        <div class="info-section-container">
+          <div class="pdf-section client-info">
+            <h4 class="pdf-section-title">Datos del Cliente</h4>
+            <p>Nombre: <span id="pdf-client-name"></span></p>
+            <p>Contacto: <span id="pdf-client-contact"></span></p>
+            <p>Dirección: <span id="pdf-client-address"></span></p>
+            <p>Localidad: <span id="pdf-client-location"></span></p>
+          </div>
+          <div class="pdf-section quote-info">
+            <h4 class="pdf-section-title">Datos del Presupuesto</h4>
+            <p>N° de Presupuesto: <span id="pdf-quote-number"></span></p>
+            <p>Fecha: <span id="pdf-quote-date"></span></p>
+          </div>
+        </div>
+
+        <div class="products-container-pdf">
+          <table class="pdf-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>P. Unitario</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="pdf-products-body"></tbody>
+          </table>
+        </div>
+
+        <div class="totals-wrapper-pdf">
+          <div class="totals-container-pdf">
+            <div class="total-line-pdf">
+              <span>Subtotal:</span>
+              <span id="pdf-subtotal"></span>
+            </div>
+            <div class="total-line-pdf">
+              <span>Descuento:</span>
+              <span id="pdf-discount"></span>
+            </div>
+            <div class="final-total-pdf">
+              <span>TOTAL FINAL:</span>
+              <span id="pdf-final-total"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdf-footer">
+        <p>Este presupuesto posee validez de 7 días a partir de su emisión.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js" defer></script>
 </body>
 </html>
